@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+ 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<script src="./public/jquery/jquery-2.0.3.min.js"></script>
+<script src="./public/bootstrap/js/bootstrap.js"></script>
+<!-- Bootstrap -->
+<link href="./public/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="./public/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+  
+<!-- Code -->
+ <script type="text/javascript">
+	$(document).ready(function() {
+					
+		$("#PhoneNumber").focus();
+		
+		$("button").click(function() {		
+			number = $(this).html();						
+			text = "";
+			if (number === 'Сохранить')
+			{			
+				$.post("/save", { name: $('#CName').val(), phone: $('#CPhone').val()} );
+			}
+			else{
+			if (number === 'Набрать номер телефона')
+			{
+				number = $("#PhoneNumber").val();
+				number = number.split(" ").join("").split("-").join("").split("(").join("").split(")").join("").split("+").join("");
+				alert("Вызов " + number);
+			}
+						
+			else
+			if (number.indexOf('Добавить контакт') > -1 ){
+			// ничего не делаем
+			}
+			else
+			{
+				number = $(this).html();
+				number = number.split(" ").join("").split("-").join("").split("(").join("").split(")").join("").split("+").join("");				
+				alert("Вызов " + number);
+			}
+			}		
+		});
+	});    
+			
+</script>
+
+
+<!-- React -->
+<script src="./public/react/react.min.js"></script>
+<script src="./public/react/JSXTransformer.js"></script>
+<script type="text/jsx" src="./public/src/prog.js"></script>
+
+<!-- html -->
+  </head>
+  <body>
+  <div class="container">	
+	<div class="modal-footer">	
+	<p class="text-center">	
+		<h2 style="text-align: center;">Телефоны сотрудников</h2>
+	</p>
+	<form class="form-search">
+    <input id = "PhoneNumber" type="text" class="input-medium search-query">
+    <button type="submit" class="btn btn-success">Набрать номер телефона</button>
+    </form>
+    
+	
+	<div class="card">
+    <div class="card-header" id="headingTwo">
+      <h5 class="mb-0">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          Добавить контакт
+        </button>
+      </h5>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+      <div class="card-body">
+	
+			<form class="form-search">
+			<label for="CName">ФИО</label>
+			<input id = "CName" type="text">
+			<label for="CPhone">Номер</label>
+			<input id = "CPhone" type="text">
+			<button type="save" class="btn btn-primary">Сохранить</button>
+			</form>
+	
+      </div>
+
+	</div>
+	
+	</div>
+	
+	<div id="example"> </div>
+			
+	</div>
+   </div>
+  </body>
+</html>
