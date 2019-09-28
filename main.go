@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-// main
 package main
 
 import (
