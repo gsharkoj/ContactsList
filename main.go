@@ -23,7 +23,7 @@ func main() {
 	fs := http.FileServer(http.Dir("public"))
 	http.Handle("/public/", http.StripPrefix("/public/", fs))
 
-	// обработки
+	// обработчики
 	http.HandleFunc("/data", data)
 	http.HandleFunc("/save", save)
 	http.HandleFunc("/del", del)
