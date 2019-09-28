@@ -68,12 +68,6 @@ func data(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(data)
 }
 
-func Add(name, url, color string) Contact {
-
-	st := Contact{Name: name, Url: url, Color: color}
-	return st
-}
-
 func save(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
