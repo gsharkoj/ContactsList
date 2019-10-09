@@ -10,6 +10,10 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+var (
+	db_conn *sql.DB
+)
+
 type Contact struct {
 	Name  string
 	Url   string
@@ -18,6 +22,13 @@ type Contact struct {
 }
 
 func main() {
+
+	var err error
+	db_conn, err = sql.Open("sqlite3", "./contacts.db")
+	if err != nil {
+		panic(err)
+	}
+	defer db_conn.Close()
 
 	// статичные файлы: react + bootstrap
 	fs := http.FileServer(http.Dir("public"))
@@ -39,10 +50,7 @@ func view(w http.ResponseWriter, r *http.Request) {
 
 func data(w http.ResponseWriter, r *http.Request) {
 
-	db, _ := sql.Open("sqlite3", "./contacts.db")
-	defer db.Close()
-
-	rows, _ := db.Query("SELECT Name, Phone, id as Id FROM clients order by Name")
+	rows, _ := db_conn.Query("SELECT Name, Phone, id as Id FROM clients order by Name")
 	defer rows.Close()
 	data := []Contact{}
 
@@ -75,9 +83,7 @@ func save(w http.ResponseWriter, r *http.Request) {
 	phone := html.EscapeString(r.FormValue("phone"))
 
 	if len(name) > 0 && len(phone) > 0 {
-		db, _ := sql.Open("sqlite3", "./contacts.db")
-		defer db.Close()
-		stmt, _ := db.Prepare("insert into clients(Name, Phone) values(?, ?)")
+		stmt, _ := db_conn.Prepare("insert into clients(Name, Phone) values(?, ?)")
 		defer stmt.Close()
 		stmt.Exec(name, phone)
 	}
@@ -89,8 +95,6 @@ func del(w http.ResponseWriter, r *http.Request) {
 	id := html.EscapeString(r.FormValue("id"))
 
 	if html.EscapeString(id) != "" {
-		db, _ := sql.Open("sqlite3", "./contacts.db")
-		defer db.Close()
-		db.Exec("delete from clients where id = $1", html.EscapeString(id))
+		db_conn.Exec("delete from clients where id = $1", html.EscapeString(id))
 	}
 }
